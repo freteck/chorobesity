@@ -29,10 +29,10 @@ export class MapComponent implements AfterViewInit {
       zoom: 7.25
     });
 
-    const tiles = L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=np9Ag3zMN1eqg19uZeYA#3.2/44.38317/-78.08289', {
+    const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 10,
       minZoom: 7.25,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     });
 
     tiles.addTo(this.map);
