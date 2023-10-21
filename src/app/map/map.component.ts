@@ -12,6 +12,7 @@ export class MapComponent implements AfterViewInit {
   private map: any;
   private counties: any;
   private geojson: any;
+  protected activeFeature: any = null;
 
   constructor(private shapeService: ShapeService,
               private backend: BackendService) {}
@@ -27,7 +28,8 @@ export class MapComponent implements AfterViewInit {
 
   }
 
-  private highlightFeature(layer: any) {
+  private activateFeature(feature: any, layer: any) {
+    this.activeFeature = feature;
     layer.setStyle({
       weight: 5,
       color: '#665',
@@ -36,8 +38,9 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  private resetHighlight(layer: any) {
+  private async deactivateFeature(feature: any, layer: any): Promise<void> {
     this.geojson.resetStyle(layer);
+    this.activeFeature = null
   }
 
   private onEachFeature(feature: any, layer: any) {
@@ -45,13 +48,11 @@ export class MapComponent implements AfterViewInit {
 
     // Highlight features on mouseover
     layer.on('mouseover', async function() {
-      self.highlightFeature(layer);
-      let data = await self.backend.getCountyData(feature['properties']['name']);
-      console.log(data)
+      self.activateFeature(feature, layer);
     });
 
     layer.on('mouseout', function() {
-      self.resetHighlight(layer);
+      self.deactivateFeature(feature, layer);
     });
   }
   

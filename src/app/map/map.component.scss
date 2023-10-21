@@ -18,3 +18,21 @@
     height: 100%;
 }
   
+
+#data-display {
+    width: 600px;
+    height: 200px;
+    border-radius: 8px;
+    background-color: white;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 100000;
+    border: 1px solid black;
+    opacity: 1;
+    transition-duration: 200ms;
+    
+    &.inactive {
+        opacity: 0;
+    }
+}
