@@ -4,7 +4,30 @@
     </div>
 </div>
 
-<div id="data-display" [ngClass]="{inactive: activeFeature === null}">
+<div id="data-display" [ngClass]="{inactive: !isFeatureActive}">
+  <div *ngIf="activeFeature !== null" class="contents-wrapper">
+    <div class="header">
+      <div class="name">
+        {{utils.uppercaseSentence(activeFeature.name.replace("_", " "))}}
+      </div>
+      <div class="population">
+        Population: {{activeFeature.population.toLocaleString("en-US")}}
+      </div>
+    </div>
+    <div class="data">
+      <div class="data-box-wrapper">
+        <div class="title">
+          Obesity Affliction:
+        </div>
+        <div class="data-wrapper">
+          <div class="data-background obesity">
+            <div class="data-fill" style="--fill-amt: {{activeFeature.obesity_percentage_afflicted}}%" ></div>
+          </div>
+          {{activeFeature.obesity_percentage_afflicted}}%
+        </div>
 
+      </div>
+    </div>
+  </div>
 </div>
   

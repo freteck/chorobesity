@@ -1,7 +1,8 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
-import { BackendService } from '../backend.service';
+import { BackendService } from '../services/backend.service';
 import { ShapeService } from '../shape.service';
+import { UtilsService } from '../services/utils.service';
 
 @Component({
   selector: 'app-map',
@@ -13,11 +14,14 @@ export class MapComponent implements AfterViewInit {
   private counties: any;
   private geojson: any;
   protected activeFeature: any = null;
+  protected isFeatureActive = false;
+  protected featureData: Map<string, any> = new Map();
 
   constructor(private shapeService: ShapeService,
-              private backend: BackendService) {}
+              private backend: BackendService,
+              protected utils: UtilsService) {}
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     this.geojson =  L.geoJSON(this.counties);
     this.initMap();
 
@@ -25,22 +29,29 @@ export class MapComponent implements AfterViewInit {
       this.counties = counties;
       this.initCountiesLayer();
     });
-
+    
+    // CHANGE THIS
+    (await this.backend.getStateDataByCounty("VA")).forEach((feature: any) => {
+      this.featureData.set(feature.name, feature);
+    });
   }
 
-  private activateFeature(feature: any, layer: any) {
-    this.activeFeature = feature;
+  private async activateFeature(feature: any, layer: any): Promise<void> {
+    this.isFeatureActive = true;
     layer.setStyle({
-      weight: 5,
-      color: '#665',
-      dashArray: '',
-      fillOpacity: 0.7
+      fillOpacity: 1
     });
+    let mod_name = feature['properties']['name'].toLowerCase().replace(" ", "_");
+    if (this.featureData.has(mod_name)) 
+      this.activeFeature = this.featureData.get(mod_name);
+    else
+      this.isFeatureActive = false;
   }
 
   private async deactivateFeature(feature: any, layer: any): Promise<void> {
     this.geojson.resetStyle(layer);
-    this.activeFeature = null
+    this.activeFeature = null;
+    this.isFeatureActive = false;
   }
 
   private onEachFeature(feature: any, layer: any) {
@@ -55,21 +66,6 @@ export class MapComponent implements AfterViewInit {
       self.deactivateFeature(feature, layer);
     });
   }
-  
-  private loadTiles() {
-
-  }
-
-  private getColor(val: number) {
-    return val > 1000 ? '#800026' :
-           val > 500  ? '#BD0026' :
-           val > 200  ? '#E31A1C' :
-           val > 100  ? '#FC4E2A' :
-           val > 50   ? '#FD8D3C' :
-           val > 20   ? '#FEB24C' :
-           val > 10   ? '#FED976' :
-                        '#FFEDA0';
-  } 
 
   private style(feature: any) {
     return {
@@ -89,11 +85,10 @@ export class MapComponent implements AfterViewInit {
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 10,
-      minZoom: 7.25,
+      minZoom: 7,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(this.map);
 
-    this.map.whenReady(this.loadTiles);
   }
 
   private initCountiesLayer() {

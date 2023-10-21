@@ -12,4 +12,8 @@ export class BackendService {
   public getCountyData(name: string): Promise<any> {
     return this.http.get(`${this.backend_url}/${name.toLowerCase().replace(" ", "_")}`).toPromise();
   }
+
+  public getStateDataByCounty(name: string): Promise<any[]> {
+    return <Promise<any[]>> this.http.get(`${this.backend_url}/`).toPromise();
+  }
 }
