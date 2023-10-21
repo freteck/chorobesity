@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ShapeService } from './shape.service';
 import { MapComponent } from './map/map.component';
+import { UploadPanelComponent } from './upload-panel/upload-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    UploadPanelComponent
   ],
   imports: [
     BrowserModule,
