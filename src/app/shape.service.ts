@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,10 @@ import { Injectable } from '@angular/core';
 export class ShapeService {
   constructor(private http: HttpClient) { }
 
-  getStateShapes() {
-    return this.http.get('./../assets/geojson/virginia-with-counties.geojson');
+  getCountiesShapes() {
+    return this.http.get('./../assets/geojson/counties.geojson');
+  }
+  getStateBoundaries() {
+    return this.http.get('./../assets/geojson/us-states.json');
   }
 }
