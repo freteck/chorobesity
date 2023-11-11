@@ -17,10 +17,14 @@ export class MapComponent implements AfterViewInit {
   protected isFeatureActive = false;
   private stateBoundaries: any;
   protected featureData: Map<string, any> = new Map();
+  protected cursorInSettings: boolean = false;
+  protected settingsOpen: boolean = false;
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
     protected utils: UtilsService) { }
+  
+  protected states: string[] = this.utils.getStates();
 
   async ngAfterViewInit(): Promise<void> {
     this.geojson = L.geoJSON(this.counties);
@@ -113,5 +117,22 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.geojson.addTo(this.map)
+  }
+
+  protected enterSettingsRegion() {
+    this.cursorInSettings = true;
+  }
+  
+  protected exitSettingsRegion() {
+    this.cursorInSettings = false;
+  }
+
+  protected openSettings() {
+    this.settingsOpen = true;
+    console.log("open")
+  }
+
+  protected closeSettings() {
+    this.settingsOpen = false;
   }
 }

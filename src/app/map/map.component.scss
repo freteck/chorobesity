@@ -17,13 +17,92 @@
 #map {
     height: 100%;
 }
-  
+
+.modal {
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    z-index: 100000;
+    opacity: 1;
+    transition: opacity 200ms;
+}
+
+.dimmed {
+    opacity: .5;
+}
+
+#settings-active-region {
+    width: 20vw;
+    height: 20vh;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100000;
+}
+
+#settings {
+    width: 200px;
+    height: fit-content;
+    top: 10px;
+    right: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+
+    &.open {
+        visibility: visible;
+    }
+
+    .close-outer-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        height: 10px !important;
+        transform: translateY(-5px);
+        
+        .close-inner-wrapper {
+            cursor: pointer;  
+        }
+    }
+
+    .heading {
+        font-weight: 500;
+        font-size: 25px;
+        margin-bottom: 10px;
+    }
+    
+}
+
+#settings-button {
+    cursor: pointer;
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    visibility: visible;
+
+    &:hover {
+        background-color: rgb(236, 236, 236);
+    }
+
+    &.open {
+        visibility: hidden;
+    }
+}
 
 #data-display {
     width: 600px;
     height: fit-content;
-    border-radius: 8px;
-    background-color: white;
     position: fixed;
     bottom: 10px;
     left: 10px;
