@@ -15,25 +15,38 @@ export class MapComponent implements AfterViewInit {
   private geojson: any;
   protected activeFeature: any = null;
   protected isFeatureActive = false;
+  private stateBoundaries: any;
   protected featureData: Map<string, any> = new Map();
 
   constructor(private shapeService: ShapeService,
-              private backend: BackendService,
-              protected utils: UtilsService) {}
+    private backend: BackendService,
+    protected utils: UtilsService) { }
 
   async ngAfterViewInit(): Promise<void> {
-    this.geojson =  L.geoJSON(this.counties);
+    this.geojson = L.geoJSON(this.counties);
     this.initMap();
-
-    this.shapeService.getStateShapes().subscribe(counties => {
+    this.shapeService.getStateBoundaries().subscribe(states => {
+      this.stateBoundaries = states;
+      this.initStateBoundariesLayer();
+    });
+    this.shapeService.getCountiesShapes().subscribe(counties => {
       this.counties = counties;
       this.initCountiesLayer();
     });
-    
+
     // CHANGE THIS
     (await this.backend.getStateDataByCounty("VA")).forEach((feature: any) => {
       this.featureData.set(feature.name, feature);
     });
+  }
+  private initStateBoundariesLayer(): void {
+    L.geoJSON(this.stateBoundaries, {
+      style: {
+        color: "#000000",
+        weight: 4,
+        opacity: 1
+      }
+    }).addTo(this.map);
   }
 
   private async activateFeature(feature: any, layer: any): Promise<void> {
@@ -42,7 +55,7 @@ export class MapComponent implements AfterViewInit {
       fillOpacity: 1
     });
     let mod_name = feature['properties']['name'].toLowerCase().replace(" ", "_");
-    if (this.featureData.has(mod_name)) 
+    if (this.featureData.has(mod_name))
       this.activeFeature = this.featureData.get(mod_name);
     else
       this.isFeatureActive = false;
@@ -58,34 +71,34 @@ export class MapComponent implements AfterViewInit {
     let self = this;
 
     // Highlight features on mouseover
-    layer.on('mouseover', async function() {
+    layer.on('mouseover', async function () {
       self.activateFeature(feature, layer);
     });
 
-    layer.on('mouseout', function() {
+    layer.on('mouseout', function () {
       self.deactivateFeature(feature, layer);
     });
   }
 
   private style(feature: any) {
     return {
-      weight: 3,
+      weight: 2,
       opacity: 0.5,
       color: '#008f68',
       fillOpacity: 0.8,
       fillColor: '#6DB65B',
     };
-}
+  }
 
   private initMap(): void {
     this.map = L.map('map', {
-      center: [ 37.4316, -79.5 ],
-      zoom: 7.25
+      center: [39.8283, -98.5795],
+      zoom: 5
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       maxZoom: 10,
-      minZoom: 7,
+      minZoom: 1,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(this.map);
 
@@ -94,7 +107,7 @@ export class MapComponent implements AfterViewInit {
   private initCountiesLayer() {
     this.geojson = L.geoJSON(this.counties, {
       style: this.style,
-      onEachFeature: (feature, layer ) => {
+      onEachFeature: (feature, layer) => {
         this.onEachFeature(feature, layer);
       }
     });
