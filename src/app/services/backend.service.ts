@@ -16,4 +16,8 @@ export class BackendService {
   public getStateDataByCounty(name: string): Promise<any[]> {
     return <Promise<any[]>> this.http.get(`${this.backend_url}/`).toPromise();
   }
+
+  public uploadFile(filename: string, filedata: any): Promise<void> {
+    return <Promise<void>> this.http.post(`${this.backend_url}/upload/test.xlsx`, {'file': filedata}).toPromise();
+  }
 }
