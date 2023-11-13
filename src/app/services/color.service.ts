@@ -11,7 +11,7 @@ export class ColorService {
   private mean_diabetes: number = -1;
   private std_obesity: number = -1;
   private std_diabetes: number = -1;
-  private widthFactor: number = .5;
+  private widthFactor: number = 1;
 
   private colors: string[][] = 
   [

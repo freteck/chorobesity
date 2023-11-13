@@ -138,15 +138,20 @@
     
     <div class="contents">
       <div class="color-map">
-        <div class="y-label label">
+        <div *ngIf="view === 'bivariate' || view === 'obesity'" class="y-label label">
           Obesity Affliction 
         </div>
-        <div class="x-label label">
+        <div *ngIf="view === 'bivariate' || view === 'diabetes'" class="x-label label">
           Diabetes Affliction 
         </div>
         <div *ngFor="let el of utils.counter(3); index as col" class="color-col">
-          <div *ngFor="let block of utils.counter(3); index as row" class="color-block" 
-          [ngStyle]="{backgroundColor: colorService.getColorFromCoords(row, col)}"
+          <div *ngFor="let block of utils.counter(3); index as row" class="color-block"
+          [ngStyle]="{
+            backgroundColor: colorService.getColorFromCoords(row, col), 
+            visibility: (view === 'bivariate') ||
+                     (view === 'obesity' && col === 0) ||
+                     (view === 'diabetes' && row === 2) ? 'visible' : 'hidden'
+          }"
           [ngClass]="{active: selectedColorCoords[0] === col && selectedColorCoords[1] === row}"
           (click)="activateColorRange(col, row)"></div>
         </div>
