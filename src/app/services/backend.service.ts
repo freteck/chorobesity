@@ -9,12 +9,26 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
 
-  public getData(view: string): Promise<any> {
+  public getChildData(view: string): Promise<any> {
     if (view === "national") 
       return this.http.get(`${this.backend_url}/`).toPromise();
     else
       return this.http.get(`${this.backend_url}/${view}/`).toPromise();
+  }
+  
+  public async getData(view: string): Promise<any> {
+    if (view === "national") 
+      console.log("FILL THIS")
+    else {
+      let ret = "";
+      (<any[]> await this.http.get(`${this.backend_url}/`).toPromise()).forEach((el: any) => {
+          if (el.name === view)
+            ret = el;
+      });
+      return ret;
     }
+      
+  }
 
   public getStateDataByCounty(name: string): Promise<any[]> {
     return <Promise<any[]>> this.http.get(`${this.backend_url}/`).toPromise();

@@ -54,10 +54,10 @@
   <div *ngIf="activeFeature !== null" class="contents-wrapper">
     <div class="header">
       <div *ngIf="view==='national'" class="name">
-        {{utils.uppercaseSentence(activeFeature.name.replace("_", " "))}}
+        {{utils.uppercaseSentence(utils.replaceAll(activeFeature.name, "_", " "))}}
       </div>
       <div *ngIf="view!=='national'" class="name">
-        {{utils.uppercaseSentence(activeFeature.county.replace("_", " "))}}
+        {{utils.uppercaseSentence(utils.replaceAll(activeFeature.county, "_", " "))}}
       </div>
       <div class="population">
         Population: {{activeFeature.population.toLocaleString("en-US")}}

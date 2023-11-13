@@ -142,11 +142,19 @@ export class UtilsService {
   }
 
   public clean(s: string): string {
-    return s.replace(" ", "_").toLowerCase();
+    let s_f = this.replaceAll(s, " ", "_")
+    s_f = this.replaceAll(s_f, "ñ", "n");
+    return s_f.toLowerCase();
   }
 
   public isInState(feature: any, state: string): boolean {
     return feature.properties.STATEFP === this.stateFIPCodes[state]
+  }
 
+  public replaceAll(s: string, pattern: string, replacement: string) {
+    let s_f = s;
+    while (s_f.indexOf(pattern) != -1)
+      s_f = s_f.replace(pattern, replacement)
+    return s_f;
   }
 }

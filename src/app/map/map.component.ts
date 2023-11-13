@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { BackendService } from '../services/backend.service';
+import { ColorService } from '../services/color.service';
 import { ShapeService } from '../services/shape.service';
 import { UtilsService } from '../services/utils.service';
 
@@ -21,10 +22,12 @@ export class MapComponent implements AfterViewInit {
   protected view: any = "virginia";
   protected activeRegions: any[] = [];
   protected data: any[] = [];
+  private parentData: any;
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
-    protected utils: UtilsService) { }
+    protected utils: UtilsService,
+    private colorService: ColorService) { }
   
   protected states: string[] = this.utils.getStates();
 
@@ -55,20 +58,23 @@ export class MapComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this.initMap();
-    this.updateMapView();
-    this.data = await this.backend.getData(this.view);
+    this.parentData = await this.backend.getData(this.view);
+    this.data = await this.backend.getChildData(this.view);
     this.data.forEach((el: any) => {
       this.featureData.set(el.county, el);
     })
+    this.initMap();
+    this.updateMapView();
   }
 
 
   private async activateFeature(feature: any, layer: any): Promise<void> {
     this.isFeatureActive = true;
     layer.setStyle({
-      fillOpacity: 1
+      color: "#000",
+      weight: 3
     });
+    layer.bringToFront()
     let cleaned_name;
     if (this.view === "national") {
       cleaned_name = this.utils.clean(feature['properties']['name']);
@@ -84,14 +90,36 @@ export class MapComponent implements AfterViewInit {
       this.isFeatureActive = false;
   }
 
+  private resetStyle(feature: any, layer: any) {
+    let f = this.featureData.get(this.utils.clean(feature.properties.NAME))
+    
+    // Handle cities
+    if (f === undefined) { 
+      f = this.featureData.get(this.utils.clean(feature.properties.NAME + "_city"))
+    }
+    if (f === undefined) { 
+      console.log(this.utils.clean(feature.properties.NAME))
+    }
+    layer.setStyle({
+      weight: 1,
+      opacity: 0.5,
+      color: "#fff",
+      fillOpacity: 1,
+      fillColor: this.colorService.getColor(f, this.parentData)
+    })
+  }
+
   private async deactivateFeature(feature: any, layer: any): Promise<void> {
-    this.geojson.resetStyle(layer);
+    this.resetStyle(feature, layer);
     this.activeFeature = null;
     this.isFeatureActive = false;
   }
+  
 
   private onEachFeature(feature: any, layer: any) {
+    this.resetStyle(feature, layer);
     let self = this;
+
     // Highlight features on mouseover
     layer.on('mouseover', async function () {
       self.activateFeature(feature, layer);
@@ -102,15 +130,6 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  private style(feature: any) {
-    return {
-      weight: 2,
-      opacity: 0.5,
-      color: '#008f68',
-      fillOpacity: 0.8,
-      fillColor: '#6DB65B',
-    };
-  }
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -128,7 +147,6 @@ export class MapComponent implements AfterViewInit {
 
   private initCountiesLayer() {
     this.geojson = L.geoJSON(this.activeRegions, {
-      style: this.style,
       onEachFeature: (feature, layer) => {
         this.onEachFeature(feature, layer);
       }
@@ -154,8 +172,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   protected async updateViewLevel() {
-    this.updateMapView();
-    this.data = await this.backend.getData(this.view);
+    this.data = await this.backend.getChildData(this.view);
     this.featureData.clear();
     if (this.view === "national")
       this.data.forEach((el: any) => {
@@ -165,7 +182,7 @@ export class MapComponent implements AfterViewInit {
       this.data.forEach((el: any) => {
         this.featureData.set(el.county, el);
       })
-
+    this.updateMapView();
     let coords;
     let zoom: number;
     if (this.view !== "national") {
@@ -176,6 +193,5 @@ export class MapComponent implements AfterViewInit {
       zoom = 5;
     }
     this.map.flyTo([coords.latitude, coords.longitude], zoom);
-
   }
 }
