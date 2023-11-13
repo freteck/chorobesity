@@ -13,42 +13,65 @@
         right: 10px;
     }
 
-    .color-map {
-        width: min(50vw, 50vh);
-        height: min(50vw, 50vh);
-        display: flex;
-        position: relative;
+    .contents {
+        transform: translateY(-50px);
+        margin-top: 50px;
+        .color-map {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            position: relative;
+            .label {
+                position: absolute;
+                
+                &.y-label {
+                    transform: rotateZ(-90deg);
+                    bottom: 65px;
+                    left: -80px;
+                }
 
-        .label {
+                &.x-label {
+                    bottom: 0px;
+                    left: 7px;
+                    transform: translateY(120%);
+                }
+            }
+
+            .color-col {
+                width: 50px;
+                height: 150px;
+            }
+            .color-block {
+                width: 50px;
+                height: 50px;
+                transition-duration: 50ms;
+                cursor: pointer;
+                
+
+                &:hover, &.active {
+                    transform: scale(1.2);
+                }
+            }
+        }
+
+        .range-wrapper {
+            margin-top: 50px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             position: absolute;
+            bottom: 10px;
+            left: 0;
 
-            &.y-label {
-                transform: rotateZ(-90deg);
-                bottom: 65px;
-                left: -80px;
-            }
-
-            &.x-label {
-                bottom: 0px;
-                left: 7px;
-                transform: translateY(120%);
+            .header {
+                font-weight: 600;
             }
         }
-
-        .color-col {
-            width: min(calc(50vw / 3.0), calc(50vh / 3.0));
-            height: min(50vw, 50vh);
-        }
-        .color-block {
-            width: min(calc(50vw / 3.0), calc(50vh / 3.0));
-            height: min(calc(50vw / 3.0), calc(50vh / 3.0));
-        }
-
-        .label {
-            position: absolute;
-            
-            &.y-label {
-            }
-        }
+    }
+    
+    h2 {
+        text-align: center;
     }
 }

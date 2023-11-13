@@ -1,7 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import { LegendComponent } from '../legend/legend.component';
 import { BackendService } from '../services/backend.service';
 import { ColorService } from '../services/color.service';
+import { MapService } from '../services/map.service';
 import { ShapeService } from '../services/shape.service';
 import { UtilsService } from '../services/utils.service';
 
@@ -24,11 +26,17 @@ export class MapComponent implements AfterViewInit {
   protected parentData: any;
   protected view: string = "bivariate";
   protected legendActive: boolean = false;
+  protected selectedOColorRange: string = "test";
+  protected selectedDColorRange: string = "test";
+  protected colorRangeActive: boolean = false;
+  protected selectedColorCoords: number[] = [];
+
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
     protected utils: UtilsService,
-    protected colorService: ColorService) { }
+    protected colorService: ColorService,
+    private mapService: MapService) { }
   
   protected states: string[] = this.utils.getStates();
 
@@ -180,6 +188,7 @@ export class MapComponent implements AfterViewInit {
     this.data = await this.backend.getChildData(this.focus);
     this.parentData = await this.backend.getData(this.focus);
     this.featureData.clear();
+    this.mapService.setView(this.view);
     if (this.focus === "national")
       this.data.forEach((el: any) => {
         this.featureData.set(el.name, el);
@@ -209,5 +218,13 @@ export class MapComponent implements AfterViewInit {
     const windowFeatures = 'resizable=no,scrollbars=no,status=no,location=no,toolbar=no,menubar=no,width=300,height=300';
     this.legendActive = false;
     window.open('/legend', '_blank', windowFeatures);
+  }
+
+  protected activateColorRange(col: number, row: number) {
+    this.colorRangeActive = true;
+    let ranges = this.colorService.getRange(col, row, this.view);
+    this.selectedOColorRange = ranges[0];
+    this.selectedDColorRange = ranges[1];
+    this.selectedColorCoords = [col, row];
   }
 }

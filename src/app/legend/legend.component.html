@@ -16,9 +16,19 @@
             Diabetes Affliction 
           </div>
           <div *ngFor="let el of utils.counter(3); index as col" class="color-col">
-            <div *ngFor="let block of utils.counter(3); index as row" class="color-block" [ngStyle]="{backgroundColor: colorService.getColorFromCoords(row, col)}">
-            </div>
+            <div *ngFor="let block of utils.counter(3); index as row" class="color-block" 
+            [ngStyle]="{backgroundColor: colorService.getColorFromCoords(row, col)}"
+            [ngClass]="{active: selectedColorCoords[0] === col && selectedColorCoords[1] === row}"
+            (click)="activateColorRange(col, row)"></div>
           </div>
         </div>
-      </div>
+        <div class="range-wrapper" [ngStyle]="{visibility: colorRangeActive ? 'visible' : 'hidden'}">
+          <div class="header">Ranges:</div>
+          <div class="range">
+            {{selectedOColorRange[0]}} < Obesity % < {{selectedOColorRange[1]}}
+          </div>
+          <div class="range">
+            {{selectedDColorRange[0]}} < Diabetes % < {{selectedDColorRange[1]}}
+          </div>
+        </div>
 </div>

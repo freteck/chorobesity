@@ -23,7 +23,7 @@ import { LegendComponent } from './legend/legend.component';
     FormsModule
   ],
   providers: [
-    ShapeService
+    ShapeService,
   ],
   bootstrap: [AppComponent]
 })
