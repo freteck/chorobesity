@@ -50,40 +50,62 @@
 </div>
 
 
-<div id="data-display" class="modal" [ngClass]="{modal: true, inactive: !isFeatureActive}">
-  <div *ngIf="activeFeature !== null" class="contents-wrapper">
-    <div class="header">
-      <div *ngIf="view==='national'" class="name">
-        {{utils.uppercaseSentence(utils.replaceAll(activeFeature.name, "_", " "))}}
+<div class="data-display-wrapper">
+  <div *ngIf="activeFeature !== null" id="state-display" [ngClass]="{modal: true, inactive: !isFeatureActive}">
+    <div class="contents-wrapper">
+      <div class="header">
+        {{utils.uppercaseSentence(utils.replaceAll(parentData.name, "_", " "))}}
       </div>
-      <div *ngIf="view!=='national'" class="name">
-        {{utils.uppercaseSentence(utils.replaceAll(activeFeature.county, "_", " "))}}
+      <div *ngIf="view === 'national'" class="data">
+        Avg. State Obesity Affliction: <i>{{utils.round(parentData.mean_obesity_percentage)}}</i>%
       </div>
-      <div class="population">
-        Population: {{activeFeature.population.toLocaleString("en-US")}}
+      <div *ngIf="view === 'national'" class="data">
+        Avg. State Diabetes Affliction: <i>{{utils.round(parentData.mean_diabetes_percentage)}}</i>%
       </div>
+      <div *ngIf="view !=='national'" class="data">
+        Avg. County Obesity Affliction: <i>{{utils.round(parentData.mean_obesity_percentage)}}</i>%
+      </div>
+      <div *ngIf="view !=='national'" class="data">
+        Avg. County Diabetes Affliction: <i>{{utils.round(parentData.mean_diabetes_percentage)}}</i>%
+      </div>
+      
     </div>
-    <div class="data">
-      <div class="data-box-wrapper">
-        <div class="title">
-          Obesity Affliction:
+  </div>
+  <div id="data-display" class="modal" [ngClass]="{modal: true, inactive: !isFeatureActive}">
+    <div *ngIf="activeFeature !== null" class="contents-wrapper">
+      <div class="header">
+        <div *ngIf="view === 'national'" class="name">
+          {{utils.uppercaseSentence(utils.replaceAll(activeFeature.name, "_", " "))}}
         </div>
-        <div class="data-wrapper">
-          <div class="data-background obesity">
-            <div class="data-fill" style="--fill-amt: {{activeFeature.obesity_percentage_afflicted}}%" ></div>
-          </div>
-          {{activeFeature.obesity_percentage_afflicted}}%
+        <div *ngIf="view !== 'national'" class="name">
+          {{utils.uppercaseSentence(utils.replaceAll(activeFeature.county, "_", " "))}}
+        </div>
+        <div class="population">
+          Population: {{activeFeature.population.toLocaleString("en-US")}}
         </div>
       </div>
-      <div class="data-box-wrapper">
-        <div class="title">
-          Diabetes Affliction:
-        </div>
-        <div class="data-wrapper">
-          <div class="data-background obesity">
-            <div class="data-fill" style="--fill-amt: {{activeFeature.diabetes_percentage_afflicted}}%" ></div>
+      <div class="data">
+        <div class="data-box-wrapper">
+          <div class="title">
+            Obesity Affliction:
           </div>
-          {{activeFeature.diabetes_percentage_afflicted}}%
+          <div class="data-wrapper">
+            <div class="data-background obesity">
+              <div class="data-fill" style="--fill-amt: {{activeFeature.obesity_percentage_afflicted}}%" ></div>
+            </div>
+            {{activeFeature.obesity_percentage_afflicted}}%
+          </div>
+        </div>
+        <div class="data-box-wrapper">
+          <div class="title">
+            Diabetes Affliction:
+          </div>
+          <div class="data-wrapper">
+            <div class="data-background obesity">
+              <div class="data-fill" style="--fill-amt: {{activeFeature.diabetes_percentage_afflicted}}%" ></div>
+            </div>
+            {{activeFeature.diabetes_percentage_afflicted}}%
+          </div>
         </div>
       </div>
     </div>

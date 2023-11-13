@@ -22,7 +22,7 @@ export class MapComponent implements AfterViewInit {
   protected view: any = "virginia";
   protected activeRegions: any[] = [];
   protected data: any[] = [];
-  private parentData: any;
+  protected parentData: any;
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
@@ -91,14 +91,19 @@ export class MapComponent implements AfterViewInit {
   }
 
   private resetStyle(feature: any, layer: any) {
-    let f = this.featureData.get(this.utils.clean(feature.properties.NAME))
+    console.log(feature)
+    let f: any;
+    if (this.view === "national") 
+      f = this.featureData.get(this.utils.clean(feature.properties.name));
+    else
+      f = this.featureData.get(this.utils.clean(feature.properties.NAME));
     
     // Handle cities
     if (f === undefined) { 
-      f = this.featureData.get(this.utils.clean(feature.properties.NAME + "_city"))
+      f = this.featureData.get(this.utils.clean(feature.properties.NAME + "_city"));
     }
     if (f === undefined) { 
-      console.log(this.utils.clean(feature.properties.NAME))
+      console.log(this.utils.clean(feature.properties.NAME));
     }
     layer.setStyle({
       weight: 1,
@@ -173,6 +178,7 @@ export class MapComponent implements AfterViewInit {
 
   protected async updateViewLevel() {
     this.data = await this.backend.getChildData(this.view);
+    this.parentData = await this.backend.getData(this.view);
     this.featureData.clear();
     if (this.view === "national")
       this.data.forEach((el: any) => {

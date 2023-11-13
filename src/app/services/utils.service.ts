@@ -144,6 +144,7 @@ export class UtilsService {
   public clean(s: string): string {
     let s_f = this.replaceAll(s, " ", "_")
     s_f = this.replaceAll(s_f, "ñ", "n");
+    s_f = this.replaceAll(s_f, "'", "");
     return s_f.toLowerCase();
   }
 
@@ -156,5 +157,9 @@ export class UtilsService {
     while (s_f.indexOf(pattern) != -1)
       s_f = s_f.replace(pattern, replacement)
     return s_f;
+  }
+
+  public round(num: number) {
+    return Math.round(num);
   }
 }
