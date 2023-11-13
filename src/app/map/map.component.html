@@ -37,7 +37,7 @@
     <div class="heading">Settings</div>
     <div class="view-selector">
       View:
-      <select>
+      <select [(ngModel)]="view" (ngModelChange)="updateViewLevel()">
         <optgroup label="National">
           <option value="national">United States</option>
         </optgroup>
