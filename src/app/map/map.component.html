@@ -119,4 +119,43 @@
     </div>
   </div>
 </div>
-  
+
+<div id="legend-wrapper" [ngClass]="{active: legendActive}">
+  <div id="legend-handle" (click)="legendActive = !legendActive">
+    <div class="name">
+      Legend
+    </div>
+  </div>
+  <div id="legend" class="modal">
+    <button class="new-window" (click)="openLegendInNewWindow()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-external-link" width="25" height="25" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+        <path d="M11 13l9 -9" />
+        <path d="M15 4h5v5" />
+      </svg>
+    </button>
+    <div class="close" (click)="legendActive = false">
+      <svg id="close" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-x" width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ff4500" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+        <path d="M10 10l4 4m0 -4l-4 4" />
+      </svg>
+    </div>
+    
+    <div class="contents">
+      <div class="color-map">
+        <div class="y-label label">
+          Obesity Affliction 
+        </div>
+        <div class="x-label label">
+          Diabetes Affliction 
+        </div>
+        <div *ngFor="let el of utils.counter(3); index as col" class="color-col">
+          <div *ngFor="let block of utils.counter(3); index as row" class="color-block" [ngStyle]="{backgroundColor: colorService.getColorFromCoords(row, col)}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

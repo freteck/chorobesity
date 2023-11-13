@@ -7,6 +7,13 @@ export class ColorService {
 
   constructor() { }
 
+  private colors: string[][] = 
+  [
+    ["#e6e2e2", "#a0b3d3", "#5c85c5"],
+    ["#d6a1a2", "#967f97", "#565f8d"],
+    ["#c65b5d", "#8b4857", "#503651"],
+  ]
+
   public getColor(child: any, parent: any, view: string): string {
     const mean_obesity: number = Number(parent.mean_obesity_percentage);
     const mean_diabetes: number = Number(parent.mean_diabetes_percentage);
@@ -20,78 +27,84 @@ export class ColorService {
     if (view === "obesity") {
       if (
         child.obesity_percentage_afflicted < mean_obesity - scale*std_obesity) {
-            color = "#e6e2e2";
+            color = this.colors[0][0];
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity - scale*std_obesity && 
         child.obesity_percentage_afflicted < mean_obesity + scale*std_obesity) {
-          color = "#d6a1a2";
+          color = this.colors[1][0];
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity + scale*std_obesity) {
-          color = "#c65b5d";
+          color = this.colors[2][0];
       } 
     } else if (view === "diabetes") {
       if (
-        child.obesity_percentage_afflicted < mean_obesity - scale*std_obesity) {
-            color = "#e6e2e2";
+        child.diabetesy_percentage_afflicted < mean_diabetes - scale*std_diabetes) {
+            color = this.colors[0][0]
       } else if (
-        child.obesity_percentage_afflicted >= mean_obesity - scale*std_obesity && 
-        child.obesity_percentage_afflicted < mean_obesity + scale*std_obesity) {
-          color = "#a0b3d3";
+        child.diabetes_percentage_afflicted >= mean_diabetes - scale*std_diabetes && 
+        child.diabetes_percentage_afflicted < mean_diabetes + scale*std_diabetes) {
+          color = this.colors[0][1];
       } else if (
-        child.obesity_percentage_afflicted >= mean_obesity + scale*std_obesity) {
-          color = "#5c85c5";
+        child.diabetes_percentage_afflicted >= mean_diabetes + scale*std_diabetes) {
+          color = this.colors[0][2];
       } 
     } else {
       if (
         child.obesity_percentage_afflicted < mean_obesity - scale*std_obesity && 
         child.diabetes_percentage_afflicted < mean_diabetes - scale*std_diabetes) {
-            color = "#e6e2e2";
+            color = this.colors[0][0];
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity - scale*std_obesity && 
         child.obesity_percentage_afflicted < mean_obesity + scale*std_obesity &&
         child.diabetes_percentage_afflicted < mean_diabetes - scale*std_diabetes) {
-          color = "#d6a1a2";
+          color = this.colors[1][0];
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity + scale*std_obesity && 
         child.diabetes_percentage_afflicted < mean_diabetes - scale*std_diabetes) {
-          color = "#c65b5d";
+          color = this.colors[2][0];
       } 
       
       else if (
         child.obesity_percentage_afflicted < mean_obesity - scale*std_obesity && 
         child.diabetes_percentage_afflicted >= mean_diabetes - scale*std_diabetes && 
         child.diabetes_percentage_afflicted < mean_diabetes + scale*std_diabetes) {
-          color = "#a0b3d3";    
+          color = this.colors[0][1];    
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity - scale*std_obesity && 
         child.obesity_percentage_afflicted < mean_obesity + scale*std_obesity &&
         child.diabetes_percentage_afflicted >= mean_diabetes - scale*std_diabetes && 
         child.diabetes_percentage_afflicted < mean_diabetes + scale*std_diabetes) {
-          color = "#967f97";    
+          color = this.colors[1][1];
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity + scale*std_obesity && 
         child.diabetes_percentage_afflicted >= mean_diabetes - scale*std_diabetes && 
         child.diabetes_percentage_afflicted < mean_diabetes + scale*std_diabetes) {
-          color = "#8b4857";    
+          color = this.colors[2][1]; 
       }
   
       else if (
         child.obesity_percentage_afflicted < mean_obesity - scale*std_obesity && 
         child.diabetes_percentage_afflicted >= mean_diabetes + scale*std_diabetes) {
-          color = "#5c85c5";    
+          color = this.colors[0][2];    
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity - scale*std_obesity && 
         child.obesity_percentage_afflicted < mean_obesity + scale*std_obesity &&
         child.diabetes_percentage_afflicted >= mean_diabetes + scale*std_diabetes) {
-          color = "#967f97";    
+          color = this.colors[1][2];    
       } else if (
         child.obesity_percentage_afflicted >= mean_obesity + scale*std_obesity && 
         child.diabetes_percentage_afflicted >= mean_diabetes + scale*std_diabetes) {
-          color = "#967f97";    
+          color = this.colors[2][2];    
       }
     }
 
     return color;
     
+  }
+
+  public getColorFromCoords(y: number, x: number) {
+    if (y >= 0 && y <= 2 && x >= 0 && x <= 2)
+      return this.colors[2-y][x];
+    return "";
   }
 }

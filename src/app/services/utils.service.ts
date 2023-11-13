@@ -162,4 +162,8 @@ export class UtilsService {
   public round(num: number) {
     return Math.round(num);
   }
+
+  public counter(num: number) {
+    return new Array(num);
+  }
 }

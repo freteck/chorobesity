@@ -23,11 +23,12 @@ export class MapComponent implements AfterViewInit {
   protected data: any[] = [];
   protected parentData: any;
   protected view: string = "bivariate";
+  protected legendActive: boolean = false;
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
     protected utils: UtilsService,
-    private colorService: ColorService) { }
+    protected colorService: ColorService) { }
   
   protected states: string[] = this.utils.getStates();
 
@@ -202,5 +203,11 @@ export class MapComponent implements AfterViewInit {
 
   protected updateView() {
     this.updateMapView();
+  }
+
+  protected openLegendInNewWindow() {
+    const windowFeatures = 'resizable=no,scrollbars=no,status=no,location=no,toolbar=no,menubar=no,width=300,height=300';
+    this.legendActive = false;
+    window.open('/legend', '_blank', windowFeatures);
   }
 }

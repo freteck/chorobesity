@@ -1,0 +1,54 @@
+.legend {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .close {
+        cursor: pointer;
+        height: 10px !important;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .color-map {
+        width: min(50vw, 50vh);
+        height: min(50vw, 50vh);
+        display: flex;
+        position: relative;
+
+        .label {
+            position: absolute;
+
+            &.y-label {
+                transform: rotateZ(-90deg);
+                bottom: 65px;
+                left: -80px;
+            }
+
+            &.x-label {
+                bottom: 0px;
+                left: 7px;
+                transform: translateY(120%);
+            }
+        }
+
+        .color-col {
+            width: min(calc(50vw / 3.0), calc(50vh / 3.0));
+            height: min(50vw, 50vh);
+        }
+        .color-block {
+            width: min(calc(50vw / 3.0), calc(50vh / 3.0));
+            height: min(calc(50vw / 3.0), calc(50vh / 3.0));
+        }
+
+        .label {
+            position: absolute;
+            
+            &.y-label {
+            }
+        }
+    }
+}
