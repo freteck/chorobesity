@@ -20,6 +20,7 @@ export class MapComponent implements AfterViewInit {
   protected settingsOpen: boolean = false;
   protected view: any = "virginia";
   protected activeRegions: any[] = [];
+  protected data: any[] = [];
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
@@ -56,31 +57,27 @@ export class MapComponent implements AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     this.initMap();
     this.updateMapView();
-
-    // CHANGE THIS
-    (await this.backend.getStateDataByCounty("VA")).forEach((feature: any) => {
-      this.featureData.set(feature.name, feature);
-    });    
+    this.data = await this.backend.getData(this.view);
+    this.data.forEach((el: any) => {
+      this.featureData.set(el.county, el);
+    })
   }
 
-  private initStateBoundariesLayer(): void {
-    L.geoJSON(this.stateBoundaries, {
-      style: {
-        color: "#000000",
-        weight: 4,
-        opacity: 1
-      }
-    }).addTo(this.map);
-  }
 
   private async activateFeature(feature: any, layer: any): Promise<void> {
     this.isFeatureActive = true;
     layer.setStyle({
       fillOpacity: 1
     });
-    let mod_name = feature['properties']['name'].toLowerCase().replace(" ", "_");
-    if (this.featureData.has(mod_name))
-      this.activeFeature = this.featureData.get(mod_name);
+    let cleaned_name;
+    console.log(this.featureData)
+    if (this.view === "national") {
+      cleaned_name = this.utils.clean(feature['properties']['name']);
+    } else {
+      cleaned_name = this.utils.clean(feature['properties']['NAME']);
+    }
+    if (this.featureData.has(cleaned_name))
+      this.activeFeature = this.featureData.get(cleaned_name);
     else
       this.isFeatureActive = false;
   }
@@ -154,8 +151,20 @@ export class MapComponent implements AfterViewInit {
     this.settingsOpen = false;
   }
 
-  protected updateViewLevel() {
+  protected async updateViewLevel() {
     this.updateMapView();
+    this.data = await this.backend.getData(this.view);
+    console.log(this.data)
+    this.featureData.clear();
+    if (this.view === "national")
+      this.data.forEach((el: any) => {
+        this.featureData.set(el.name, el);
+      });
+    else
+      this.data.forEach((el: any) => {
+        this.featureData.set(el.county, el);
+      })
+
     let coords;
     let zoom: number;
     if (this.view !== "national") {

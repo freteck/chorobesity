@@ -5,13 +5,16 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class BackendService {
-  private backend_url = 'http://127.0.0.1:8000';
+  private backend_url = 'http://127.0.0.1:8000/api/states';
 
   constructor(private http: HttpClient) { }
 
-  public getCountyData(name: string): Promise<any> {
-    return this.http.get(`${this.backend_url}/${name.toLowerCase().replace(" ", "_")}`).toPromise();
-  }
+  public getData(view: string): Promise<any> {
+    if (view === "national") 
+      return this.http.get(`${this.backend_url}/`).toPromise();
+    else
+      return this.http.get(`${this.backend_url}/${view}/`).toPromise();
+    }
 
   public getStateDataByCounty(name: string): Promise<any[]> {
     return <Promise<any[]>> this.http.get(`${this.backend_url}/`).toPromise();

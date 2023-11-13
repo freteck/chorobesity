@@ -53,8 +53,11 @@
 <div id="data-display" class="modal" [ngClass]="{modal: true, inactive: !isFeatureActive}">
   <div *ngIf="activeFeature !== null" class="contents-wrapper">
     <div class="header">
-      <div class="name">
+      <div *ngIf="view==='national'" class="name">
         {{utils.uppercaseSentence(activeFeature.name.replace("_", " "))}}
+      </div>
+      <div *ngIf="view!=='national'" class="name">
+        {{utils.uppercaseSentence(activeFeature.county.replace("_", " "))}}
       </div>
       <div class="population">
         Population: {{activeFeature.population.toLocaleString("en-US")}}
