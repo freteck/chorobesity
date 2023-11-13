@@ -15,14 +15,14 @@ export class MapComponent implements AfterViewInit {
   private geojson: any;
   protected activeFeature: any = null;
   protected isFeatureActive = false;
-  private stateBoundaries: any;
   protected featureData: Map<string, any> = new Map();
   protected cursorInSettings: boolean = false;
   protected settingsOpen: boolean = false;
-  protected view: any = "virginia";
+  protected focus: any = "virginia";
   protected activeRegions: any[] = [];
   protected data: any[] = [];
   protected parentData: any;
+  protected view: string = "bivariate";
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
@@ -35,10 +35,10 @@ export class MapComponent implements AfterViewInit {
     this.activeRegions = [];
     if (this.geojson)
       this.geojson.clearLayers();
-    if (this.view === "national") {
+    if (this.focus === "national") {
       this.shapeService.getStateBoundaries().subscribe((counties: any) => {
         counties.features.forEach((feature: any) => {
-          if (this.utils.isInState(feature, this.view)) {
+          if (this.utils.isInState(feature, this.focus)) {
             this.activeRegions.push(feature);
           }
         });
@@ -47,7 +47,7 @@ export class MapComponent implements AfterViewInit {
     } else {
       this.shapeService.getCountiesShapes().subscribe((counties: any) => {
         counties.features.forEach((feature: any) => {
-          if (this.utils.isInState(feature, this.view)) {
+          if (this.utils.isInState(feature, this.focus)) {
             this.activeRegions.push(feature);
           }
         });
@@ -58,8 +58,8 @@ export class MapComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this.parentData = await this.backend.getData(this.view);
-    this.data = await this.backend.getChildData(this.view);
+    this.parentData = await this.backend.getData(this.focus);
+    this.data = await this.backend.getChildData(this.focus);
     this.data.forEach((el: any) => {
       this.featureData.set(el.county, el);
     })
@@ -76,7 +76,7 @@ export class MapComponent implements AfterViewInit {
     });
     layer.bringToFront()
     let cleaned_name;
-    if (this.view === "national") {
+    if (this.focus === "national") {
       cleaned_name = this.utils.clean(feature['properties']['name']);
     } else {
       cleaned_name = this.utils.clean(feature['properties']['NAME']);
@@ -91,9 +91,8 @@ export class MapComponent implements AfterViewInit {
   }
 
   private resetStyle(feature: any, layer: any) {
-    console.log(feature)
     let f: any;
-    if (this.view === "national") 
+    if (this.focus === "national") 
       f = this.featureData.get(this.utils.clean(feature.properties.name));
     else
       f = this.featureData.get(this.utils.clean(feature.properties.NAME));
@@ -102,7 +101,7 @@ export class MapComponent implements AfterViewInit {
     if (f === undefined) { 
       f = this.featureData.get(this.utils.clean(feature.properties.NAME + "_city"));
     }
-    if (f === undefined) { 
+    if (f === undefined) {
       console.log(this.utils.clean(feature.properties.NAME));
     }
     layer.setStyle({
@@ -110,7 +109,7 @@ export class MapComponent implements AfterViewInit {
       opacity: 0.5,
       color: "#fff",
       fillOpacity: 1,
-      fillColor: this.colorService.getColor(f, this.parentData)
+      fillColor: this.colorService.getColor(f, this.parentData, this.view)
     })
   }
 
@@ -176,11 +175,11 @@ export class MapComponent implements AfterViewInit {
     this.settingsOpen = false;
   }
 
-  protected async updateViewLevel() {
-    this.data = await this.backend.getChildData(this.view);
-    this.parentData = await this.backend.getData(this.view);
+  protected async updateFocus() {
+    this.data = await this.backend.getChildData(this.focus);
+    this.parentData = await this.backend.getData(this.focus);
     this.featureData.clear();
-    if (this.view === "national")
+    if (this.focus === "national")
       this.data.forEach((el: any) => {
         this.featureData.set(el.name, el);
       });
@@ -191,13 +190,17 @@ export class MapComponent implements AfterViewInit {
     this.updateMapView();
     let coords;
     let zoom: number;
-    if (this.view !== "national") {
-      coords = this.utils.getStateCoordinates(this.view);
+    if (this.focus !== "national") {
+      coords = this.utils.getStateCoordinates(this.focus);
       zoom = 7.25
     } else {
       coords = {"latitude": 39.8283, "longitude": -98.5795};
       zoom = 5;
     }
     this.map.flyTo([coords.latitude, coords.longitude], zoom);
+  }
+
+  protected updateView() {
+    this.updateMapView();
   }
 }
