@@ -212,6 +212,8 @@ export class MapComponent implements AfterViewInit {
   }
 
   protected updateView() {
+    this.colorRangeActive = false;
+    this.selectedColorCoords = [];
     this.updateMapView();
   }
 

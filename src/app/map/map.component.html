@@ -62,7 +62,12 @@
   <div *ngIf="activeFeature !== null" id="state-display" [ngClass]="{modal: true, inactive: !isFeatureActive}">
     <div class="contents-wrapper">
       <div class="header">
-        {{utils.uppercaseSentence(utils.replaceAll(parentData.name, "_", " "))}}
+        <div *ngIf="focus === 'national'" class="name">
+          United States
+        </div>
+        <div *ngIf="focus !== 'national'" class="name">
+          {{utils.uppercaseSentence(utils.replaceAll(activeFeature.county, "_", " "))}}
+        </div>
       </div>
       <div *ngIf="focus === 'national'" class="data">
         Avg. State Obesity Affliction: <i>{{utils.round(parentData.mean_obesity_percentage)}}</i>%
@@ -153,16 +158,26 @@
                      (view === 'diabetes' && row === 2) ? 'visible' : 'hidden'
           }"
           [ngClass]="{active: selectedColorCoords[0] === col && selectedColorCoords[1] === row}"
-          (click)="activateColorRange(col, row)"></div>
+          (click)="activateColorRange(col, row)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-click" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" opacity=".3" stroke="white" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M3 12l3 0" />
+            <path d="M12 3l0 3" />
+            <path d="M7.8 7.8l-2.2 -2.2" />
+            <path d="M16.2 7.8l2.2 -2.2" />
+            <path d="M7.8 16.2l-2.2 2.2" />
+            <path d="M12 12l9 3l-4 2l-2 4l-3 -9" />
+          </svg>
+        </div>
         </div>
       </div>
       <div class="range-wrapper">
         <div class="header">Ranges:</div>
         <div *ngIf="colorRangeActive" class="ranges">
-          <div class="range">
+          <div *ngIf="view !== 'diabetes'" class="range">
             {{selectedOColorRange[0]}} < Obesity % < {{selectedOColorRange[1]}}
           </div>
-          <div class="range">
+          <div *ngIf="view !== 'obesity'" class="range">
             {{selectedDColorRange[0]}} < Diabetes % < {{selectedDColorRange[1]}}
           </div>
         </div>
