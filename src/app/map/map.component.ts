@@ -26,11 +26,12 @@ export class MapComponent implements AfterViewInit {
   protected parentData: any;
   protected view: string = "bivariate";
   protected legendActive: boolean = false;
-  protected selectedOColorRange: string = "test";
-  protected selectedDColorRange: string = "test";
+  protected selectedOColorRange: any = "test";
+  protected selectedDColorRange: any = "test";
   protected colorRangeActive: boolean = false;
   protected selectedColorCoords: number[] = [];
-
+  protected tempWidthFactor = this.colorService.getWidthFactor();
+  protected wfChanged: boolean = false;
 
   constructor(private shapeService: ShapeService,
     private backend: BackendService,
@@ -226,5 +227,19 @@ export class MapComponent implements AfterViewInit {
     this.selectedOColorRange = ranges[0];
     this.selectedDColorRange = ranges[1];
     this.selectedColorCoords = [col, row];
+  }
+
+  protected updateWidthFactor() {
+    this.colorService.setWidthFactor(this.tempWidthFactor);
+    let ranges = this.colorService.getRange(this.selectedColorCoords[0], this.selectedColorCoords[1], this.view);
+    this.selectedOColorRange = ranges[0];
+    this.selectedDColorRange = ranges[1];
+    this.geojson.clearLayers()
+    this.updateMapView();
+    this.wfChanged = false;
+  }
+
+  protected help_wf() {
+    alert('"Width Factor" is the value by which the standard deviation of the view\'s datasets is mulitplied - thereby creating the three color ranges per statistic. A smaller Width Factor creates a smaller "middle" category, thus leading to more extreme categorizations. A larger width factors groups more regions into the middle, leaving only outliers colored otherwise.');
   }
 }

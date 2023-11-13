@@ -151,13 +151,35 @@
           (click)="activateColorRange(col, row)"></div>
         </div>
       </div>
-      <div class="range-wrapper" [ngStyle]="{visibility: colorRangeActive ? 'visible' : 'hidden'}">
+      <div class="range-wrapper">
         <div class="header">Ranges:</div>
-        <div class="range">
-          {{selectedOColorRange[0]}} < Obesity % < {{selectedOColorRange[1]}}
+        <div *ngIf="colorRangeActive" class="ranges">
+          <div class="range">
+            {{selectedOColorRange[0]}} < Obesity % < {{selectedOColorRange[1]}}
+          </div>
+          <div class="range">
+            {{selectedDColorRange[0]}} < Diabetes % < {{selectedDColorRange[1]}}
+          </div>
         </div>
-        <div class="range">
-          {{selectedDColorRange[0]}} < Diabetes % < {{selectedDColorRange[1]}}
+
+        <div *ngIf="!colorRangeActive" class="default"><i>No Color Range Selected</i></div>
+      </div>
+      <div class="width-factor-wrapper">
+        <div class="header">
+          Width Factor
+          <div class="help-wrapper" (click)="help_wf()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-help" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+              <path d="M12 17l0 .01" />
+              <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4" />
+            </svg>
+          </div>
+        </div>
+        <input type="range" min=".1" max="2" step=".01" name="wf" [(ngModel)]="tempWidthFactor" (ngModelChange)="wfChanged = true"/>
+        <div class="bottom">
+          {{tempWidthFactor}}
+          <Button (click)="updateWidthFactor()" *ngIf="wfChanged">Apply</Button>
         </div>
       </div>
     </div>

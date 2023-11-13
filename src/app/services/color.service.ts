@@ -11,7 +11,7 @@ export class ColorService {
   private mean_diabetes: number = -1;
   private std_obesity: number = -1;
   private std_diabetes: number = -1;
-  private scale: number = .5;
+  private widthFactor: number = .5;
 
   private colors: string[][] = 
   [
@@ -31,74 +31,74 @@ export class ColorService {
 
     if (view === "obesity") {
       if (
-        child.obesity_percentage_afflicted < this.mean_obesity - this.scale*this.std_obesity) {
+        child.obesity_percentage_afflicted < this.mean_obesity - this.widthFactor*this.std_obesity) {
             color = this.colors[0][0];
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity - this.scale*this.std_obesity && 
-        child.obesity_percentage_afflicted < this.mean_obesity + this.scale*this.std_obesity) {
+        child.obesity_percentage_afflicted >= this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.obesity_percentage_afflicted < this.mean_obesity + this.widthFactor*this.std_obesity) {
           color = this.colors[1][0];
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity + this.scale*this.std_obesity) {
+        child.obesity_percentage_afflicted >= this.mean_obesity + this.widthFactor*this.std_obesity) {
           color = this.colors[2][0];
       } 
     } else if (view === "diabetes") {
       if (
-        child.diabetes_percentage_afflicted < this.mean_diabetes - this.scale*this.std_diabetes) {
+        child.diabetes_percentage_afflicted < this.mean_diabetes - this.widthFactor*this.std_diabetes) {
             color = this.colors[0][0]
       } else if (
-        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.scale*this.std_diabetes && 
-        child.diabetes_percentage_afflicted < this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.widthFactor*this.std_diabetes && 
+        child.diabetes_percentage_afflicted < this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[0][1];
       } else if (
-        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[0][2];
       } 
     } else {
       if (
-        child.obesity_percentage_afflicted < this.mean_obesity - this.scale*this.std_obesity && 
-        child.diabetes_percentage_afflicted < this.mean_diabetes - this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted < this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.diabetes_percentage_afflicted < this.mean_diabetes - this.widthFactor*this.std_diabetes) {
             color = this.colors[0][0];
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity - this.scale*this.std_obesity && 
-        child.obesity_percentage_afflicted < this.mean_obesity + this.scale*this.std_obesity &&
-        child.diabetes_percentage_afflicted < this.mean_diabetes - this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted >= this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.obesity_percentage_afflicted < this.mean_obesity + this.widthFactor*this.std_obesity &&
+        child.diabetes_percentage_afflicted < this.mean_diabetes - this.widthFactor*this.std_diabetes) {
           color = this.colors[1][0];
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity + this.scale*this.std_obesity && 
-        child.diabetes_percentage_afflicted < this.mean_diabetes - this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted >= this.mean_obesity + this.widthFactor*this.std_obesity && 
+        child.diabetes_percentage_afflicted < this.mean_diabetes - this.widthFactor*this.std_diabetes) {
           color = this.colors[2][0];
       } 
       
       else if (
-        child.obesity_percentage_afflicted < this.mean_obesity - this.scale*this.std_obesity && 
-        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.scale*this.std_diabetes && 
-        child.diabetes_percentage_afflicted < this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted < this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.widthFactor*this.std_diabetes && 
+        child.diabetes_percentage_afflicted < this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[0][1];    
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity - this.scale*this.std_obesity && 
-        child.obesity_percentage_afflicted < this.mean_obesity + this.scale*this.std_obesity &&
-        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.scale*this.std_diabetes && 
-        child.diabetes_percentage_afflicted < this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted >= this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.obesity_percentage_afflicted < this.mean_obesity + this.widthFactor*this.std_obesity &&
+        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.widthFactor*this.std_diabetes && 
+        child.diabetes_percentage_afflicted < this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[1][1];
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity + this.scale*this.std_obesity && 
-        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.scale*this.std_diabetes && 
-        child.diabetes_percentage_afflicted < this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted >= this.mean_obesity + this.widthFactor*this.std_obesity && 
+        child.diabetes_percentage_afflicted >= this.mean_diabetes - this.widthFactor*this.std_diabetes && 
+        child.diabetes_percentage_afflicted < this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[2][1]; 
       }
   
       else if (
-        child.obesity_percentage_afflicted < this.mean_obesity - this.scale*this.std_obesity && 
-        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted < this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[0][2];    
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity - this.scale*this.std_obesity && 
-        child.obesity_percentage_afflicted < this.mean_obesity + this.scale*this.std_obesity &&
-        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted >= this.mean_obesity - this.widthFactor*this.std_obesity && 
+        child.obesity_percentage_afflicted < this.mean_obesity + this.widthFactor*this.std_obesity &&
+        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[1][2];    
       } else if (
-        child.obesity_percentage_afflicted >= this.mean_obesity + this.scale*this.std_obesity && 
-        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.scale*this.std_diabetes) {
+        child.obesity_percentage_afflicted >= this.mean_obesity + this.widthFactor*this.std_obesity && 
+        child.diabetes_percentage_afflicted >= this.mean_diabetes + this.widthFactor*this.std_diabetes) {
           color = this.colors[2][2];    
       }
     }
@@ -118,24 +118,42 @@ export class ColorService {
 
     if (view !== "diabetes") {
       if (row == 2) {
-        ret[0] = ["0%", `${this.mean_obesity - this.scale*this.std_obesity}%`]
+        ret[0] = [0, this.mean_obesity - this.widthFactor*this.std_obesity];
       } else if (row == 1) {
-        ret[0] = [`${this.mean_obesity - this.scale*this.std_obesity}%`, `${this.mean_obesity + this.scale*this.std_obesity}%`]
+        ret[0] = [this.mean_obesity - this.widthFactor*this.std_obesity, this.mean_obesity + this.widthFactor*this.std_obesity];
       } else if (row == 0) {
-        ret[0] = [`${this.mean_obesity + this.scale*this.std_obesity}%`, "100%"]
+        ret[0] = [this.mean_obesity + this.widthFactor*this.std_obesity, 100];
       }
     }
 
     if (view !== "obesity") {
       if (col == 0) {
-        ret[1] = ["0%", `${this.mean_diabetes - this.scale*this.std_diabetes}%`]
+        ret[1] = [0, this.mean_diabetes - this.widthFactor*this.std_diabetes];
       } else if (col == 1) {
-        ret[1] = [`${this.mean_diabetes - this.scale*this.std_diabetes}%`, `${this.mean_diabetes + this.scale*this.std_diabetes}%`]
+        ret[1] = [this.mean_diabetes - this.widthFactor*this.std_diabetes, this.mean_diabetes + this.widthFactor*this.std_diabetes];
       } else if (col == 2) {
-        ret[1] = [`${this.mean_diabetes + this.scale*this.std_diabetes}%`, "100%"]
+        ret[1] = [this.mean_diabetes + this.widthFactor*this.std_diabetes, 100];
       }
     }
 
-    return ret;
+    let f_ret: any[][] = [];
+    let temp: any;
+    ret.forEach((y: any) => {
+      temp = [];
+      y.forEach((el: any) => {
+        temp.push(`${Math.round(el * 100) / 100}%`);
+      });
+      f_ret.push(temp);
+    });
+
+    return f_ret;
+  }
+
+  public getWidthFactor() {
+    return this.widthFactor;
+  }
+
+  public setWidthFactor(wf: number) {
+    this.widthFactor = wf;
   }
 }

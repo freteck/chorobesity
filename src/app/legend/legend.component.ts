@@ -9,8 +9,8 @@ import { UtilsService } from '../services/utils.service';
   styleUrls: ['./legend.component.scss']
 })
 export class LegendComponent implements OnInit {
-  protected selectedOColorRange: string = "test";
-  protected selectedDColorRange: string = "test";
+  protected selectedOColorRange: any = "test";
+  protected selectedDColorRange: any = "test";
   protected colorRangeActive: boolean = false;
   protected selectedColorCoords: number[] = [];
   protected view: string = "";
