@@ -70,15 +70,17 @@ export class MapComponent implements AfterViewInit {
       fillOpacity: 1
     });
     let cleaned_name;
-    console.log(this.featureData)
     if (this.view === "national") {
       cleaned_name = this.utils.clean(feature['properties']['name']);
     } else {
       cleaned_name = this.utils.clean(feature['properties']['NAME']);
     }
+
     if (this.featureData.has(cleaned_name))
       this.activeFeature = this.featureData.get(cleaned_name);
-    else
+    else if (this.featureData.has(cleaned_name + "_city")) {
+      this.activeFeature = this.featureData.get(cleaned_name + "_city");
+    } else
       this.isFeatureActive = false;
   }
 
@@ -154,7 +156,6 @@ export class MapComponent implements AfterViewInit {
   protected async updateViewLevel() {
     this.updateMapView();
     this.data = await this.backend.getData(this.view);
-    console.log(this.data)
     this.featureData.clear();
     if (this.view === "national")
       this.data.forEach((el: any) => {
