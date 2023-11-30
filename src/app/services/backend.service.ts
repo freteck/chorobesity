@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackendService {
-  private backend_url = 'http://127.0.0.1:8000/api/states';
+  private backend_url = `${environment.backendUrl}/api/states`;
 
   constructor(private http: HttpClient) { }
 
