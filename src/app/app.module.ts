@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ShapeService } from './services/shape.service';
 import { MapComponent } from './map/map.component';
-import { UploadPanelComponent } from './upload-panel/upload-panel.component';
 import { FormsModule } from '@angular/forms';
 import { LegendComponent } from './legend/legend.component';
 
@@ -13,7 +12,6 @@ import { LegendComponent } from './legend/legend.component';
   declarations: [
     AppComponent,
     MapComponent,
-    UploadPanelComponent,
     LegendComponent
   ],
   imports: [
